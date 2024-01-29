@@ -19,16 +19,17 @@ public class RollerBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontalInput;
-        float verticalInput;
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-
-        Vector3 movement = new Vector3(horizontalInput, 0.0f, verticalInput);
+    }
+    
+    void FixedUpdate()
+    {
+         Vector3 movement = new Vector3(horizontalInput, 0.0f, verticalInput);
+         
         _playerRigidbody.AddForce(movement);
     }
-
     private void (Collider other)
 
 }
