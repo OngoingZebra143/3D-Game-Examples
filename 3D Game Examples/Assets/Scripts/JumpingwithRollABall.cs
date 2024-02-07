@@ -11,7 +11,9 @@ public class JumpingwithRollABall : MonoBehaviour
     public float Speed = 10f;
     private float _horizontalInput;
     private float _verticalInput;
+    private bool _isAtCheckpoint = false;
     private Vector3 _startingPosition;
+    private Vector3 _checkpointPosition;
     private Rigidbody _playerRigidbody;
 
     // Start is called before the first frame update
@@ -37,7 +39,14 @@ public class JumpingwithRollABall : MonoBehaviour
 
         if(transform.position.y < OutOfBounds)
         {
-            transform.position = _startingPosition;
+            if(_isAtCheckpoint)
+            {
+                transform.position = _checkpointPosition;
+            }
+            else
+            {
+                transform.position = _startingPosition;
+            }
         }
     }
     
@@ -59,7 +68,12 @@ public class JumpingwithRollABall : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Checkpoint"))
         {
-            _startingPosition = other.gameObject.transform.position;
+            _checkpointPosition = other.gameObject.transform.position;
+        }
+        if(other.gameObject.CompareTag("Endpoint"))
+        {
+            _isAtCheckpoint = false;
+            transform.position = _startingPosition;
         }
     }
 }
