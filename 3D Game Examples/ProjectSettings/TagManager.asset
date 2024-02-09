@@ -8,6 +8,7 @@ TagManager:
   - Checkpoint
   - Dead Zone
   - Endpoint
+  - Points
   layers:
   - Default
   - TransparentFX

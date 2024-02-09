@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class JumpingwithRollABall : MonoBehaviour
 {
+    public TextMeshProUGUI scoreText;
+    public int score = 0;
     public float JumpForce = 10f;
     public float GravityModifier = 1f;
     public float OutOfBounds = -10f;
     public bool IsOnGround = true;
     public float Speed = 10f;
     private float _horizontalInput;
-    private float _verticalInput;
+    private float _forwardInput;
     private bool _isAtCheckpoint = false;
     private Vector3 _startingPosition;
     private Vector3 _checkpointPosition;
@@ -22,6 +25,7 @@ public class JumpingwithRollABall : MonoBehaviour
         _playerRigidbody = GetComponent<Rigidbody>();
         Physics.gravity *= GravityModifier;
         _startingPosition = transform.position;
+        scoreText.text = "Score: " + score.ToString();
     }
 
     // Update is called once per frame
@@ -29,7 +33,7 @@ public class JumpingwithRollABall : MonoBehaviour
     {
 
         _horizontalInput = Input.GetAxis("Horizontal");
-        _verticalInput = Input.GetAxis("Vertical");
+        _forwardInput = Input.GetAxis("Vertical");
 
         if(Input.GetKeyDown(KeyCode.Space) && IsOnGround)
         {
@@ -52,7 +56,7 @@ public class JumpingwithRollABall : MonoBehaviour
     
     void FixedUpdate()
     {
-         Vector3 movement = new Vector3(_horizontalInput, 0.0f, _verticalInput);
+         Vector3 movement = new Vector3(_horizontalInput, 0.0f, _forwardInput);
          
         _playerRigidbody.AddForce(movement);
     }   
@@ -62,18 +66,38 @@ public class JumpingwithRollABall : MonoBehaviour
         {
             IsOnGround = true;
         }
+
+        if(collision.gameObject.CompareTag("Dead Zone"))
+        {
+           if(_isAtCheckpoint)
+           {
+              transform.position = _checkpointPosition;
+           }
+           else
+           {
+               transform.position = _startingPosition;
+           }
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Checkpoint"))
         {
+            _isAtCheckpoint = true;
             _checkpointPosition = other.gameObject.transform.position;
         }
         if(other.gameObject.CompareTag("Endpoint"))
         {
             _isAtCheckpoint = false;
             transform.position = _startingPosition;
+        }
+
+        if(other.gameObject.CompareTag("Collectible"))
+        {
+            score++;
+            scoreText.text = "Score; " + score.ToString();
+            Destroy(other.gameObject);
         }
     }
 }
