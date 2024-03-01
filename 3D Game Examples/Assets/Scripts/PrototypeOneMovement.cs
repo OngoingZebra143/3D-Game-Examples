@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCpntroller : MonoBehaviour
+public class PrototypeOneMovement : MonoBehaviour
 {
     public float Speed = 10f;
     public float RotaionalSpeed = 45f;
